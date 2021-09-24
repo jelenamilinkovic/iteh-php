@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <title>Document</title>
+</head>
+
+<style>
+      ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #282828;
+  }
+  
+  li {
+    float: left;
+  }
+  
+  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+
+  li a:hover {
+    background-color: #111;
+  }
+  .active {
+    background-color: #4CAF50;
+  }
+</style>
+<body>
+
+    <ul>
+        <li><a style="text-decoration: none;" href="http://localhost/restoran-master/admin.html">Home</a></li>
+        <li><a style="text-decoration: none;" href="http://localhost/restoran-master/narudzbine.html">Orders</a></li>        
+        <li><a style="text-decoration: none;" href="http://localhost/restoran-master/operacije/odajavi_se.php">Log Out</a></li>        
+      </ul>
+
+    <section style="height: 100vh;" class="bg-family py-5 ">
+        <div class="container">
+
+        <div class="row  text-center ">
+            <div class="col-md-12">
+                <h1 class="display-4" style="letter-spacing: 20px; ">PORUCI ONLINE</h1>
+                <h3 style="letter-spacing: 15px; display: inline-block;">Dodaj Novo Jelo</h3>
+                <button style="margin-bottom: 15px; display: inline-block; height: 36px; background-color: rgb(66, 186, 150); border: rgb(66, 186, 150);" id='dodaj' type='button' class='btn btn-primary' style='margin-left:15px; border: none;'><i  style="border: none;" class="fa fa-plus"></i></button>
+            </div>
+        </div>
+        <div class="forme"></div>
+       
+        
+        <div id="form"class="add-new" style="padding-top:0px;">
+            <div id="forma" class="form" >
+              <form class="add-form" method="post" action="operacije/dodaj_hranu.php">
+                <input style="color:black;"type="text" name="naziv" placeholder="naziv"/>
+                <input style="color:black;"type="text" name="opis"placeholder="opis"/>
+                <input style="color:black;"type="text" name="slika"placeholder="slika"/>
+                <input style="color:black;"type="text" name="cena"placeholder="cena"/>
+                <button>Sacuvaj</button>
+              </form>
+            </div>
+          </div>
+        <div class="mt-5 hrana"></div>   
+            
+    </div>
+    </section>
+</body>
+</html>
+<script>
+    $(document).ready(function(){
+        document.getElementById("forma").style.display = "none";
+             $.ajax({
+                url:'operacije/prikazi_hranu.php',
+                type:'POST',
+                success:function(hrana){
+                    if(!hrana.error){
+                        console.log('vratio');
+                        $('.hrana').html(hrana);
+                    }
+                }
+  
+            });  
+            $(".hrana").on('click','.dodajUKorpu', function(){
+            console.log('kliknuto');
+            let id=this.id;
+                $.ajax({
+                    url:'operacije/dodaj_u_korpu.php',
+                    type:'POST',
+                    data:{id:id}
+                });
+            }); 
+            $(".hrana").on('click','.izmeni', function(){
+            let id=this.id;
+                $.ajax({
+                    url:'operacije/vrati_hranu.php',
+                    type:'POST',
+                    data:{id:id},
+                    success:function(hrana){
+                    if(!hrana.error){
+                        console.log('vratio');
+                        $('.forme').html(hrana);
+                    }
+                }
+                });
+            });
+            $(".hrana").on('click','.obrisi', function(){
+            let id=this.id;
+            console.log(id);
+                $.ajax({
+                    url:'operacije/obrisi_hranu.php',
+                    type:'POST',
+                    data:{id:id},
+                    success:function(){
+                        location.reload();
+                }
+                });
+            });
+            $("#dodaj").on('click', function(){
+            document.getElementById("forma").style.display = "block";
+            document.getElementById("dodaj").style.display = "none";
+            });
+          
+        });
+  
+  
+  
+         
+  
+    </script>

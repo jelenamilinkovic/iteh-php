@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <title>Document</title>
+</head>
+
+<style>
+    ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #282828;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #111;
+}
+.active {
+  background-color: #4CAF50;
+}
+</style>
+
+<body>
+
+    <ul>
+        <li><a style="text-decoration: none;" href="http://localhost/restoran-master/index.html">Home</a></li>
+        <li><a style="text-decoration: none;" href="http://localhost/restoran-master/korpa.php"><i class="fa fa-shopping-cart"></i></a></li>
+        <li><a style="text-decoration: none;" href="http://localhost/restoran-master/prijavi_se.html">Sign In</a></li>        
+      </ul>
+
+    <section style="height: 100vh;" class="bg-family py-5 ">
+        <div class="container">
+
+        <div class="row  text-center">
+            <div class="col-md-12">
+                <h1 class="display-4" style="letter-spacing: 20px; ">PORUCI ONLINE</h1>
+                <h3 style="letter-spacing: 15px; ">Non-Vegetarian</h3>
+            </div>
+        </div>
+
+        <div class="wrap">
+            <div class="search">
+               <input id="search" type="text" class="searchTerm" placeholder="Enter players name">
+               <button type="submit" class="searchButton">
+                 <i class="fa fa-search"></i>
+              </button>
+              <button style="background-color: rgb(66, 186, 150);" type="submit" id="sortButtonUp">
+                <i class="fa fa-sort-up"></i>
+             </button>
+             <button style="background-color: rgb(223, 71, 89);" type="submit" id="sortButtonDown">
+                <i class="fa fa-sort-down"></i>
+             </button>
+            </div>
+         </div>
+
+         <br><br>
+
+        <div class="mt-5 hrana">
+            
+        </div>   
+            
+    </div>
+    </section>
+</body>
+</html>
+<script>
+    $(document).ready(function(){
+             $.ajax({
+                url:'operacije/prikazi_hranu.php',
+                type:'POST',
+                success:function(hrana){
+                    if(!hrana.error){
+                        console.log('vratio');
+                        $('.hrana').html(hrana);
+                    }
+                }
+  
+            });  
+            $(".hrana").on('click','.dodajUKorpu', function(){
+            console.log('kliknuto');
+            let id=this.id;
+            console.log(this.id);
+                $.ajax({
+                    url:'operacije/dodaj_u_korpu.php',
+                    type:'POST',
+                    data:{id:id}
+                });
+            }); 
+            // //kada neko ukuca nesto u seaech
+            $('#search').keyup(function(){
+  
+                var search=$('#search').val();
+                console.log(search);
+                $.ajax({
+                    url:'operacije/pretrazi_hranu.php',
+                    //prosledjujemo preko kljuca search atribut search
+                    data:{search:search},
+                    type:'POST',
+                    success:function(data){
+                        //ako nema greske onda u result ubacimo data koji je vracen
+                        if(!data.error){
+                            $('.hrana').html(data);
+                            if(data==""){
+                              $.ajax({
+                              url:'operacije/prikazi_hranu.php',
+                              type:'POST',
+                              success:function(data){
+                              if(!data.error){
+                              $('.hrana').html(data);
+                             }
+                            }
+                            });  
+                            }
+                        }
+                        }  
+                });
+            });
+            $("#sortButtonUp").on('click', function(){
+              let sort='DESC';
+              $.ajax({
+                url:'operacije/sortiraj_hranu.php',
+                type:'POST',
+                data:{sort:sort},
+                success:function(prikazi_igrace){
+                    if(!prikazi_igrace.error){
+                        $('.hrana').html(prikazi_igrace);
+                    }
+                }
+  
+            }); 
+  
+           });
+           $("#sortButtonDown").on('click', function(){
+              let sort='ASC';
+              $.ajax({
+                url:'operacije/sortiraj_hranu.php',
+                type:'POST',
+                data:{sort:sort},
+                success:function(prikazi_igrace){
+                    if(!prikazi_igrace.error){
+                        $('.hrana').html(prikazi_igrace);
+                    }
+                }
+  
+            }); 
+  
+           });
+        });
+  
+  
+  
+         
+  
+    </script>

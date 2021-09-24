@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <title>Document</title>
+</head>
+<body>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+   
+    <h1 style="display: inline-block; margin-left: 42vw; color:#d4af37;">Sve Narudzbine</h1>
+    <a style="margin-left:20px; font-size: 20px; display: inline-block;" href="http://localhost/restoran-master/admin.html"><i class="fa fa-arrow-left"></i></a>
+    
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <div style="margin-top: 50px;" class="container">
+       
+    </div>
+</body>
+</html>
+<script>
+    $(document).ready(function(){
+
+             $.ajax({
+                url:'operacije/vrati_narudzbine.php',
+                type:'POST',
+                success:function(narudzbine){
+                    if(!narudzbine.error){
+                        console.log('vratio');
+                        $('.container').html(narudzbine);
+                        $('[id^=detail-]').hide();
+                        $('.toggle').click(function() {
+                        $input = $( this );
+                        $target = $('#'+$input.attr('data-toggle'));
+                        $target.slideToggle();
+                    });
+                    }
+                }
+  
+            });  
+            
+        });
+  
+  
+  
+         
+  
+    </script>
